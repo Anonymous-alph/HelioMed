@@ -1,0 +1,17 @@
+services:
+  backend:
+    image: ${DOCKERHUB_USERNAME}/helio-backend:latest
+    container_name: helio-backend
+    env_file: ./backend/.env
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    image: ${DOCKERHUB_USERNAME}/helio-frontend:latest
+    container_name: helio-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

@@ -1,0 +1,146 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--white);
+  border-radius: 24px;
+  max-width: 500px;
+  width: 100%;
+  max-height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header {
+  padding: 2rem 2rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(13, 109, 111, 0.1);
+  flex-shrink: 0;
+}
+
+.icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.header h2 {
+  font-size: 1.5rem;
+  color: var(--charcoal);
+}
+
+.content {
+  padding: 1.5rem 2rem;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.content > p {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+
+.requirements {
+  background: var(--light-teal);
+  padding: 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.requirements h4 {
+  font-size: 0.95rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--deep-teal);
+}
+
+.requirements ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.requirements li {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 1rem;
+  background: var(--cream);
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.checkbox:hover {
+  background: var(--light-teal);
+}
+
+.checkbox input {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--deep-teal);
+  flex-shrink: 0;
+}
+
+.checkbox span {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 2rem 2rem;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+@media (max-width: 500px) {
+  .modal {
+    margin: 1rem;
+  }
+
+  .header, .content, .actions {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,40 @@
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(13, 109, 111, 0.9);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  will-change: left, top;
+  transition: transform 0.1s ease;
+}
+
+.cursorFollower {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(13, 109, 111, 0.45);
+  background: rgba(104, 188, 163, 0.08);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  will-change: left, top;
+  transition: transform 0.12s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.cursor.active {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+.cursorFollower.active {
+  transform: translate(-50%, -50%) scale(1.15);
+  border-color: rgba(13, 109, 111, 0.75);
+  background: rgba(127, 185, 168, 0.2);
+}

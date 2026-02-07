@@ -1,0 +1,85 @@
+.message {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 85%;
+}
+
+.botMessage {
+  align-self: flex-start;
+}
+
+.userMessage {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.messageAvatar {
+  width: 36px;
+  height: 36px;
+  background: var(--light-teal);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.userMessage .messageAvatar {
+  background: var(--deep-teal);
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.userMessage .messageContent {
+  align-items: flex-end;
+}
+
+.messageBubble {
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  background: var(--light-teal);
+  line-height: 1.6;
+}
+
+.userMessage .messageBubble {
+  background: var(--deep-teal);
+  color: var(--white);
+}
+
+.messageBubble p {
+  margin-bottom: 0.5rem;
+}
+
+.messageBubble p:last-child {
+  margin-bottom: 0;
+}
+
+.messageBubble ul,
+.messageBubble ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.messageBubble li {
+  margin-bottom: 0.25rem;
+}
+
+.messageBubble strong {
+  font-weight: 600;
+}
+
+.messageTime {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  padding: 0 0.25rem;
+}
+
+@media (max-width: 600px) {
+  .message {
+    max-width: 95%;
+  }
+}
