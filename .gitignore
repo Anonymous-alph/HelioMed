@@ -46,3 +46,11 @@ env/
 # Testing
 coverage/
 .nyc_output/
+
+# Secrets & Keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
