@@ -13,8 +13,8 @@ export default function Home() {
             <h1>Your Health, <span className={styles.highlight}>Reimagined</span></h1>
             <p className={styles.heroDescription}>
               Experience the perfect synthesis of medical expertise and personalized care.
-              We combine cutting-edge Technology with a holistic approach to wellness,
-              ensuring every patient receives truly transformative healthcare.
+              We combine artifical intelligence with individualized approaches to wellness,
+              ensuring every patient receives truly <b><i>reimagined</i></b> healthcare.
             </p>
             <div className={styles.heroCta}>
               <Link to="/consultation">
@@ -93,16 +93,16 @@ export default function Home() {
       {/* Features Marquee */}
       <div className={styles.featuresMarquee}>
         <div className={styles.marqueeContent}>
-          <div className={styles.marqueeItem}>24/7 Emergency Care</div>
-          <div className={styles.marqueeItem}>Board-Certified Specialists</div>
-          <div className={styles.marqueeItem}>Advanced Diagnostics</div>
-          <div className={styles.marqueeItem}>Personalized Treatment Plans</div>
-          <div className={styles.marqueeItem}>State-of-the-Art Technology</div>
-          <div className={styles.marqueeItem}>Holistic Wellness Programs</div>
-          <div className={styles.marqueeItem}>24/7 Emergency Care</div>
-          <div className={styles.marqueeItem}>Board-Certified Specialists</div>
-          <div className={styles.marqueeItem}>Advanced Diagnostics</div>
-          <div className={styles.marqueeItem}>Personalized Treatment Plans</div>
+          <div className={styles.marqueeItem}>Helio Med</div>
+          <div className={styles.marqueeItem}>Your Health, Reimagined</div>
+          <div className={styles.marqueeItem}>Helio Med</div>
+          <div className={styles.marqueeItem}>Your Health, Reimagined</div>
+          <div className={styles.marqueeItem}>Helio Med</div>
+          <div className={styles.marqueeItem}>Your Health, Reimagined</div>
+          <div className={styles.marqueeItem}>Helio Med</div>
+          <div className={styles.marqueeItem}>Your Health, Reimagined</div>
+          <div className={styles.marqueeItem}>Helio Med</div>
+          <div className={styles.marqueeItem}>Your Health, Reimagined</div>
         </div>
       </div>
 
