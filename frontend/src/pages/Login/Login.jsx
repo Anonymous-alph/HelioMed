@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import CustomCursor from '../../components/CustomCursor';
+import ThreeBackground from '../../components/ThreeBackground';
 import styles from './Login.module.css';
 
 export default function LoginPage() {
@@ -112,6 +113,7 @@ export default function LoginPage() {
         </div>
 
         <div className={styles.authRight}>
+          <ThreeBackground />
           <div className={styles.authVisual}>
             <div className={styles.visualContent}>
               <h2>Your Health, <span>Simplified</span></h2>

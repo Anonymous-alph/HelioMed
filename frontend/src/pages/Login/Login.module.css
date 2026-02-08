@@ -236,14 +236,17 @@
 
 /* Right Side - Visual */
 .authRight {
-  background: linear-gradient(135deg, var(--deep-teal), #0a5456);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem;
+  overflow: hidden;
 }
 
 .authVisual {
+  position: relative;
+  z-index: 1;
   max-width: 450px;
   color: var(--white);
 }
