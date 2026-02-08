@@ -9,7 +9,7 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={styles.heroContainer}>
           <div className={styles.heroContent}>
-            <div className={styles.heroLabel}>Award-Winning Healthcare</div>
+            <div className={styles.heroLabel}>Codefest-Winning Healthcare</div>
             <h1>Your Health, <span className={styles.highlight}>Reimagined</span></h1>
             <p className={styles.heroDescription}>
               Experience the perfect synthesis of medical expertise and personalized care.
@@ -182,20 +182,16 @@ export default function Home() {
       <section className={styles.stats}>
         <div className={styles.statsContainer}>
           <div className={styles.statItem}>
-            <span className={styles.statValue}>75K+</span>
+            <span className={styles.statValue}>1+</span>
             <span className={styles.statLabelStats}>Patients Treated Annually</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statValue}>200+</span>
-            <span className={styles.statLabelStats}>Medical Professionals</span>
-          </div>
-          <div className={styles.statItem}>
-            <span className={styles.statValue}>98%</span>
+            <span className={styles.statValue}>100%</span>
             <span className={styles.statLabelStats}>Success Rate</span>
           </div>
           <div className={styles.statItem}>
-            <span className={styles.statValue}>30+</span>
-            <span className={styles.statLabelStats}>Years of Excellence</span>
+            <span className={styles.statValue}>24</span>
+            <span className={styles.statLabelStats}>Hours of Excellence</span>
           </div>
         </div>
       </section>
