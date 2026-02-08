@@ -131,63 +131,47 @@ export default function Home() {
 
       <hr className={styles.divider} />
 
-      {/* Services Grid - Disease Categories */}
+      {/* Services Grid - Our Medical Services */}
       <section className={styles.services}>
         <div className={styles.container}>
           <div className={styles.sectionIntroCenter}>
             <div className={styles.sectionLabel}>Comprehensive Care</div>
-            <h2 className={styles.sectionTitle}>Diseases Our Services Cover</h2>
+            <h2 className={styles.sectionTitle}>Our Medical Services</h2>
             <p className={styles.sectionDescription}>
-              From preventive care to specialized treatments, we offer a full spectrum of medical services.
+              From inquiry responses to personal assistance, we offer a full spectrum of medical services designed to support your health at every stage.
             </p>
           </div>
 
           <div className={styles.servicesGrid}>
             <div className={styles.serviceCard}>
-              <span className={styles.serviceIcon}>🫀</span>
-              <h3 className={styles.serviceTitle}>Cardiology</h3>
+              <span className={styles.serviceIcon}>📍</span>
+              <h3 className={styles.serviceTitle}>Store Locator</h3>
               <p className={styles.serviceDescription}>
-                Comprehensive heart care including diagnostics, interventions, and preventive cardiology.
+                Upload your prescription, and instantly see the closest available pharmacies to pick it up.
               </p>
             </div>
 
             <div className={styles.serviceCard}>
-              <span className={styles.serviceIcon}>🧠</span>
-              <h3 className={styles.serviceTitle}>Neurology</h3>
+              <span className={styles.serviceIcon}>💊</span>
+              <h3 className={styles.serviceTitle}>Prescription Inquiries</h3>
               <p className={styles.serviceDescription}>
-                Advanced neurological care for conditions affecting the brain, spine, and nervous system.
+                Our AI assistant clarifies any doubts regarding your prescription, like dosage amounts and timings.
               </p>
             </div>
 
             <div className={styles.serviceCard}>
-              <span className={styles.serviceIcon}>🦴</span>
-              <h3 className={styles.serviceTitle}>Orthopedics</h3>
+              <span className={styles.serviceIcon}>🎙️</span>
+              <h3 className={styles.serviceTitle}>Doctor Conversation Recorder</h3>
               <p className={styles.serviceDescription}>
-                Expert musculoskeletal care including joint replacement, sports medicine, and rehabilitation.
-              </p>
-            </div>
-
-            <div className={styles.serviceCard}>
-              <span className={styles.serviceIcon}>👁️</span>
-              <h3 className={styles.serviceTitle}>Ophthalmology</h3>
-              <p className={styles.serviceDescription}>
-                Complete vision care from routine eye exams to advanced surgical procedures.
-              </p>
-            </div>
-
-            <div className={styles.serviceCard}>
-              <span className={styles.serviceIcon}>🩺</span>
-              <h3 className={styles.serviceTitle}>Primary Care</h3>
-              <p className={styles.serviceDescription}>
-                Comprehensive healthcare focusing on prevention, wellness, and chronic disease management.
+                Record your interaction with a medical professional, and our AI powered tool provides a summary of diagnosis, treatment options, prescriptions by the doctor, and future plans.
               </p>
             </div>
 
             <div className={styles.serviceCard}>
               <span className={styles.serviceIcon}>🔬</span>
-              <h3 className={styles.serviceTitle}>Diagnostics</h3>
+              <h3 className={styles.serviceTitle}>Drug Image Detector</h3>
               <p className={styles.serviceDescription}>
-                State-of-the-art imaging and laboratory services for accurate medical decisions.
+                Upload an image of your medication, and our AI detection service will identify it and break it down so you can understand the chemicals involved, how they work, and possible side effects to be mindful of.
               </p>
             </div>
           </div>
