@@ -1,101 +1,50 @@
-name: Build, Push & Deploy
+name: Deploy to EC2
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
-
-env:
-  BACKEND_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/helio-backend
-  FRONTEND_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/helio-frontend
+    branches: [ "main" ]
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push backend
-        uses: docker/build-push-action@v6
-        with:
-          context: ./backend
-          push: true
-          tags: |
-            ${{ env.BACKEND_IMAGE }}:latest
-            ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+      - name: Build and push Backend Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/helio-backend:latest ./backend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/helio-backend:latest
 
-      - name: Build and push frontend
-        uses: docker/build-push-action@v6
-        with:
-          context: ./frontend
-          push: true
-          build-args: |
-            VITE_API_URL=${{ secrets.VITE_API_URL }}
-            VITE_NEON_AUTH_URL=${{ secrets.VITE_NEON_AUTH_URL }}
-          tags: |
-            ${{ env.FRONTEND_IMAGE }}:latest
-            ${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+      - name: Build and push Frontend Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/helio-frontend:latest ./frontend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/helio-frontend:latest
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Copy docker-compose to server
+      - name: Copy docker-compose via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
+          username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "docker-compose.yml"
-          target: "/opt/helio/"
+          target: "~/HelioMed"
 
-      - name: Deploy to EC2
+      - name: SSH and Restart target Docker containers
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
+          username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          # Passes Docker Hub username secret into .env for the docker-compose file
           script: |
-            cd /opt/helio
-
-            # Set DOCKERHUB_USERNAME for docker-compose.yml variable substitution
+            cd ~/HelioMed
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
-
-            # Create backend .env file
-            mkdir -p backend
-            cat > backend/.env << 'EOF'
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-            CORS_ORIGINS=["http://${{ secrets.EC2_HOST }}","https://${{ secrets.EC2_HOST }}"]
-            EOF
-
-            # Pull latest images
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/helio-backend:latest
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/helio-frontend:latest
-
-            # Stop existing containers
-            sudo docker compose down || true
-
-            # Start containers
-            sudo docker compose up -d
-
-            # Wait for backend to be ready
-            sleep 5
-
-            # Run migrations
-            sudo docker exec helio-backend alembic upgrade head || echo "Migration failed or no migrations"
-
-            # Show running containers
-            sudo docker ps
-
-            # Clean up old images
-            sudo docker image prune -f
+            docker-compose pull
+            docker-compose up -d --remove-orphans
