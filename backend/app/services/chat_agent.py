@@ -2,6 +2,10 @@ from functools import lru_cache
 
 from pydantic_ai import Agent, RunContext
 from pydantic_ai.messages import ModelMessage
+from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.providers.openai import OpenAIProvider
+
+from app.core.config import settings
 
 BASE_SYSTEM_PROMPT = (
     "You are Helio Health Assistant, a medical information tool. You help users understand "
@@ -38,8 +42,10 @@ BASE_SYSTEM_PROMPT = (
 
 @lru_cache(maxsize=1)
 def _get_agent() -> Agent:
+    provider = OpenAIProvider(api_key=settings.OPENAI_API_KEY)
+    model = OpenAIModel("gpt-4o", provider=provider)
     agent = Agent(
-        "openai:gpt-4o",
+        model,
         deps_type=str,
         system_prompt=BASE_SYSTEM_PROMPT,
     )
