@@ -46,6 +46,25 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -eu
+
+            wait_for_http() {
+              url="$1"
+              attempts="$2"
+              i=1
+              while [ "$i" -le "$attempts" ]; do
+                if curl -fsS "$url" >/dev/null; then
+                  echo "Healthy: $url"
+                  return 0
+                fi
+                echo "Waiting for $url ($i/$attempts)"
+                sleep 3
+                i=$((i + 1))
+              done
+              echo "Health check failed: $url"
+              return 1
+            }
+
             cd ~/HelioMed
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
             
@@ -63,6 +82,18 @@ jobs:
             
             # Wait for backend to be ready, then run DB migrations
             sleep 5
-            sudo docker exec helio-backend alembic upgrade head
-            curl -fsS http://localhost:3000/health
-            curl -fsS http://localhost:3000/health/db
+            if ! sudo docker exec helio-backend alembic upgrade head; then
+              sudo docker logs helio-backend --tail 200 || true
+              exit 1
+            fi
+
+            if ! wait_for_http http://localhost:3000/health 20; then
+              sudo docker logs helio-frontend --tail 200 || true
+              sudo docker logs helio-backend --tail 200 || true
+              exit 1
+            fi
+
+            if ! wait_for_http http://localhost:3000/health/db 20; then
+              sudo docker logs helio-backend --tail 200 || true
+              exit 1
+            fi
