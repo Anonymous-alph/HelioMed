@@ -1,6 +1,10 @@
 import styles from './ConsultationDashboard.module.css';
 
 export default function ConsultationDashboard({ transcript, keyPoints, prescription, summary }) {
+  const handlePrintPrescription = () => {
+    window.print();
+  };
+
   return (
     <div className={styles.resultsGrid}>
       {/* Transcript */}
@@ -72,12 +76,14 @@ export default function ConsultationDashboard({ transcript, keyPoints, prescript
 
       {/* Prescription */}
       {prescription && (prescription.medicines?.length > 0 || prescription.instructions?.length > 0) && (
-        <div className={styles.resultCard}>
+        <div className={`${styles.resultCard} ${styles.printablePrescription}`}>
           <div className={styles.cardHeader}>
             <span className={styles.cardIcon}>💊</span>
             <h3>Generated Prescription</h3>
             <div className={styles.cardActions}>
-              <button className={styles.actionBtn}>Print</button>
+              <button type="button" className={styles.actionBtn} onClick={handlePrintPrescription}>
+                Print
+              </button>
             </div>
           </div>
           <div className={styles.cardContent}>

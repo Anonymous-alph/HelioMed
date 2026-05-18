@@ -243,3 +243,46 @@
     margin-top: 0.75rem;
   }
 }
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .printablePrescription,
+  .printablePrescription * {
+    visibility: visible;
+  }
+
+  .printablePrescription {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    border: 1px solid rgba(13, 109, 111, 0.15);
+    break-inside: avoid;
+  }
+
+  .printablePrescription .cardActions {
+    display: none;
+  }
+
+  .printablePrescription .cardContent {
+    padding: 0;
+  }
+
+  .printablePrescription .prescription {
+    border: none;
+    border-radius: 0;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .printablePrescription .medicineItem {
+    break-inside: avoid;
+  }
+}
