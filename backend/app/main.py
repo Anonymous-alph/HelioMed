@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +8,8 @@ from sqlalchemy import text
 from app.api.v1.router import api_v1_router
 from app.core.config import settings
 from app.database.session import engine
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Helio Med API", version="1.0.0")
 
@@ -18,6 +22,12 @@ app.add_middleware(
 )
 
 app.include_router(api_v1_router)
+
+
+@app.on_event("startup")
+async def startup_checks():
+    if not settings.OPENAI_API_KEY.strip():
+        logger.warning("OPENAI_API_KEY is empty; OpenAI-backed features will fail until the environment secret is set.")
 
 
 @app.get("/health")
