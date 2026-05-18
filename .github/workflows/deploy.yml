@@ -48,6 +48,17 @@ jobs:
           script: |
             set -eu
 
+            compose() {
+              if sudo docker compose version >/dev/null 2>&1; then
+                sudo docker compose "$@"
+              elif command -v docker-compose >/dev/null 2>&1; then
+                sudo docker-compose "$@"
+              else
+                echo "No Docker Compose command found on host"
+                exit 1
+              fi
+            }
+
             wait_for_http() {
               url="$1"
               attempts="$2"
@@ -77,8 +88,10 @@ jobs:
             CORS_ORIGINS=["http://${{ secrets.EC2_HOST }}","https://${{ secrets.EC2_HOST }}","http://${{ secrets.EC2_HOST }}:3000","https://${{ secrets.EC2_HOST }}:3000"]
             EOF
 
-            docker-compose pull
-            docker-compose up -d --remove-orphans
+            compose version || true
+            compose down --remove-orphans || true
+            compose pull
+            compose up -d --remove-orphans
             
             # Wait for backend to be ready, then run DB migrations
             sleep 5
