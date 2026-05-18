@@ -55,7 +55,7 @@ jobs:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-            CORS_ORIGINS=["http://${{ secrets.EC2_HOST }}","https://${{ secrets.EC2_HOST }}"]
+            CORS_ORIGINS=["http://${{ secrets.EC2_HOST }}","https://${{ secrets.EC2_HOST }}","http://${{ secrets.EC2_HOST }}:3000","https://${{ secrets.EC2_HOST }}:3000"]
             EOF
 
             docker-compose pull
@@ -63,4 +63,6 @@ jobs:
             
             # Wait for backend to be ready, then run DB migrations
             sleep 5
-            sudo docker exec helio-backend alembic upgrade head || echo "Migration failed or no migrations"
+            sudo docker exec helio-backend alembic upgrade head
+            curl -fsS http://localhost:3000/health
+            curl -fsS http://localhost:3000/health/db

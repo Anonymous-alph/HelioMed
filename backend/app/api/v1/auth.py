@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,12 +13,15 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 COOKIE_MAX_AGE = 7 * 24 * 60 * 60  # 7 days
 
 
-def _set_session_cookie(response: Response, token: str) -> None:
+def _set_session_cookie(request: Request, response: Response, token: str) -> None:
+    forwarded_proto = request.headers.get("x-forwarded-proto", "")
+    scheme = forwarded_proto.split(",", 1)[0].strip() or request.url.scheme
+
     response.set_cookie(
         key="session_token",
         value=token,
         httponly=True,
-        secure=True,
+        secure=scheme == "https",
         samesite="lax",
         path="/",
         max_age=COOKIE_MAX_AGE,
@@ -28,6 +31,7 @@ def _set_session_cookie(response: Response, token: str) -> None:
 @router.post("/register", response_model=AuthResponse)
 async def register(
     body: RegisterRequest,
+    request: Request,
     response: Response,
     db: AsyncSession = Depends(get_db),
 ):
@@ -48,7 +52,7 @@ async def register(
     await db.refresh(user)
 
     token = create_access_token(str(user.id))
-    _set_session_cookie(response, token)
+    _set_session_cookie(request, response, token)
 
     return AuthResponse(
         user=UserOut(id=user.id, email=user.email, name=user.name),
@@ -59,6 +63,7 @@ async def register(
 @router.post("/login", response_model=AuthResponse)
 async def login(
     body: LoginRequest,
+    request: Request,
     response: Response,
     db: AsyncSession = Depends(get_db),
 ):
@@ -71,7 +76,7 @@ async def login(
         )
 
     token = create_access_token(str(user.id))
-    _set_session_cookie(response, token)
+    _set_session_cookie(request, response, token)
 
     return AuthResponse(
         user=UserOut(id=user.id, email=user.email, name=user.name),

@@ -1,4 +1,30 @@
-const API_BASE = import.meta.env.VITE_API_URL || '';
+const RAW_API_BASE = (import.meta.env.VITE_API_URL || '').trim();
+
+function resolveApiBase() {
+  if (!RAW_API_BASE) {
+    return '';
+  }
+
+  if (typeof window === 'undefined') {
+    return RAW_API_BASE.replace(/\/$/, '');
+  }
+
+  try {
+    const configuredUrl = new URL(RAW_API_BASE, window.location.origin);
+
+    // When the configured API host matches the current host, prefer the
+    // frontend's same-origin nginx proxy to avoid cross-origin cookie issues.
+    if (configuredUrl.hostname === window.location.hostname && (configuredUrl.pathname === '/' || configuredUrl.pathname === '')) {
+      return '';
+    }
+
+    return `${configuredUrl.origin}${configuredUrl.pathname}`.replace(/\/$/, '');
+  } catch {
+    return RAW_API_BASE.replace(/\/$/, '');
+  }
+}
+
+const API_BASE = resolveApiBase();
 
 async function request(method, endpoint, data = null, { noRedirect = false } = {}) {
   const url = `${API_BASE}${endpoint}`;
@@ -26,8 +52,19 @@ async function request(method, endpoint, data = null, { noRedirect = false } = {
   }
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Request failed' }));
-    throw new Error(error.detail || error.message || 'Request failed');
+    const bodyText = await response.text();
+
+    try {
+      const error = JSON.parse(bodyText);
+      throw new Error(error.detail || error.message || 'Request failed');
+    } catch {
+      const message = bodyText.trim();
+      if (message && !message.startsWith('<')) {
+        throw new Error(message);
+      }
+
+      throw new Error(response.status >= 500 ? 'Service unavailable' : 'Request failed');
+    }
   }
 
   if (response.status === 204) {
